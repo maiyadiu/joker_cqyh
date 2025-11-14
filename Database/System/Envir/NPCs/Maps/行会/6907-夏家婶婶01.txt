@@ -1,30 +1,12 @@
-[@MAIN]
-#IF
-检测公会活动 3
-#ACT
-Break
+﻿[@MAIN]
 #SAY
-公会活动暂未开启<#SO:1>取消<#SO/>
-#ELSESAY
-有相关权限的公会成员开启活动后，所有公会成员均进入后山修炼，获得经验奖励！<#SO:1>进入公会后山<#SO/><#SO:2>取消<#SO/>
+欢迎进入公会温泉修炼！<#SO:1>进入公会温泉<#SO/><#SO:2>取消<#SO/>
 
 [@1]
-#IF
-检测公会活动 3
 #ACT
-;活动未开启时点击取消，直接返回
-Break
-
-#IF
-Checkcalc <$STR(J131)> == 0
-#ACT
-;发放BUFF格式：GiveBuff BUFF编号
 GiveBuff 2513
-;变量赋值格式：MOV 变量名 值
-MOV J131 1
 进入公会温泉
-#ELSEACT
-进入公会温泉
+Break
 
 [@2]
 #ACT
@@ -34,7 +16,6 @@ Break
 #IF
 CheckQuest 10000382 ACTIVE
 #ACT
-;变量运算格式：Calc 变量名 运算符 值
-CALC Y554 + 1
+;变量运算格式：Calc 变量名 运算式  CALC Y554 + 1
 更新任务进度 10000382
 Break

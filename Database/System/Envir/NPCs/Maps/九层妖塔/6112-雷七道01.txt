@@ -1,158 +1,83 @@
 [@MAIN]
 #IF
-Checkcalc <$STR(A0)> == 完成妖塔
+CheckCalc <$STR(F15)> < 9
+#ACT
 #SAY
-勇士，你已成功挑战了9层妖塔，可以选择我们最近发现的妖塔秘境进行挑战，妖塔秘境只有1层，完成该挑战将获得更高的奖励。<br>每天只能完成1种妖塔挑战模式，请选择你要进行的挑战。<#SO:1>挑战九层妖塔<#SO/><#SO:3>挑战妖塔秘境<#SO/><#INS:S25>关于九层妖塔<#INS/>
+任何达到20级的勇士均可进入九层妖塔进行试炼。<#SO:1>挑战九层妖塔<#SO/><#SO:2>使用灵药符兑换绑定药水<#SO/><#INS:S25>关于九层妖塔<#INS/>
 #ELSESAY
-任何达到20级的勇士均可进入九层妖塔进行试炼。<#SO:1>挑战九层妖塔<#SO/><#INS:S25>关于九层妖塔<#INS/>
+勇士，你已成功挑战了九层妖塔，可以选择我们最近发现的妖塔秘境进行挑战，妖塔秘境只有1层，完成该挑战将获得更高的奖励。<br>每天只能完成1种妖塔挑战模式，请选择你要进行的挑战。<#SO:1>挑战九层妖塔<#SO/><#SO:3>挑战妖塔秘境<#SO/><#SO:2>使用灵药符兑换绑定药水<#SO/><#INS:S25>关于九层妖塔<#INS/>
 
 [@1]
 #IF
-Checkcalc <$STR(J0)> >= 1
+#ACT
+#SAY
+九层妖塔层数众多，妖物聚集，请勇士准备完毕后再来应战！<#SO:1>我已准备完毕<#SO/><#SO:99>如此凶险？容我三思……<#SO/>
+
+[@1_1]
+;#IF
+;CheckCalc <$STR(J3)> != 0
+;#ACT
+;Break
+;#SAY
+;您今日的闯关次数已用完。
+
+;#IF
+;CheckCalc <$STR(J4)> != 0
+;#ACT
+;Break
+;#SAY
+;您今日已通关妖塔秘境！
+
+#IF
+CheckCalc <$LEVEL> < 20
 #ACT
 Break
 #SAY
-勇士，你已经完成了九层妖塔的挑战，无需重复挑战。
-
-#IF
-检测有无队伍
-#ACT
-Break
-#SAY
-单人副本禁止组队！
-
-#IF
-Level  < 20
-#ACT
-Break
-#SAY
-等级未达到20级！
-
-#IF
-CHECKGOLD < 20000
-#ACT
-Break
-#SAY
-身上不足[20000]金币！
+您等级未达到20级！
 
 #IF
 #ACT
-CreateInstance  227 180 1 0
-TakeGold 20000
-;GOTO @检测七天乐
-InstanceMove  227 1028 148 0
+MOV J3 1
+CreateInstance 227 180 0 0 0
 
 [@3]
 #IF
-Checkcalc <$STR(J0)> >= 1
+CheckCalc <$STR(F15)> < 9
 #ACT
 Break
 #SAY
-勇士，你今天已经完成了妖塔挑战，请明天再来。
+您未通关九层妖塔！
 
 #IF
-Checkcalc <$STR(A0)> != 完成妖塔
+CheckCalc <$STR(J3)> != 0
+#ACT
+Break
 #SAY
-勇士，你尚未完成九层妖塔的挑战，无法进入妖塔秘境。
+您今日进入过九层妖塔，无法挑战妖塔秘境！
 
 #IF
+CheckCalc <$STR(J4)> != 0
+#ACT
+Break
 #SAY
-妖塔秘境之魔物，寿命无尽，不老不死，不生不灭，凶险莫测。勇士，你意欲挑战何种难度呢？<#SO:1>挑战妖塔秘境(标准)<#SO/><#SO:2>挑战妖塔秘境(进阶)<#SO/><#SO:3>挑战妖塔秘境(困难)<#SO/><#SO:5>如此凶险容我三思<#SO/>
+您今日已通关妖塔秘境！
+
+#IF
+#ACT
+#SAY
+<#SO:1>挑战妖塔秘境(标准)<#SO/><#SO:2>挑战妖塔秘境(进阶)<#SO/><#SO:3>挑战妖塔秘境(困难)<#SO/>
 
 [@3_1]
 #IF
-;检测队长
-GROUPLEADER
 #ACT
-Break
-#SAY
-单人副本禁止组队！
-
-#IF
-Level < 20
-#ACT
-Break
-#SAY
-等级未达到20级！
-
-#IF
-CHECKGOLD < 20000
-#ACT
-Break
-#SAY
-身上不足[20000]金币！
-
-#IF
-#ACT
-CreateInstance  227 180 1 1
-TakeGold  20000
-MOV J0 1
-;GOTO @检测七天乐
-InstanceMove  227 596 576 0
+CreateInstance 227 180 0 0 1
 
 [@3_2]
 #IF
-GROUPLEADER
 #ACT
-Break
-#SAY
-单人副本禁止组队！
-
-#IF
-Level < 20
-#ACT
-Break
-#SAY
-等级未达到20级！
-
-#IF
-CHECKGOLD < 20000
-#ACT
-Break
-#SAY
-身上不足[20000]金币！
-
-#IF
-#ACT
-CreateInstance  227 180 1 2
-TakeGold  20000
-MOV J0 1
-;GOTO @检测七天乐
-InstanceMove  227 596 576 0
+CreateInstance 227 180 0 0 2
 
 [@3_3]
 #IF
-GROUPLEADER
 #ACT
-Break
-#SAY
-单人副本禁止组队！
-
-#IF
-Level < 20
-#ACT
-Break
-#SAY
-等级未达到20级！
-
-#IF
-CHECKGOLD < 20000
-#ACT
-Break
-#SAY
-身上不足[20000]金币！
-
-#IF
-#ACT
-CreateInstance 227 180 1 3
-TakeGold  20000
-MOV J0 1
-;GOTO @检测七天乐
-InstanceMove  227 596 576 0
-
-;[@检测七天乐]
-;#IF
-;IsOpenSevenCarnival
-;#ACT
-;ChangeSevenCarnival 38 + 1
-;ChangeSevenCarnival 43 + 1
+CreateInstance 227 180 0 0 3

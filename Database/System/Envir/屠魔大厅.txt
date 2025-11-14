@@ -1,0 +1,376 @@
+[@屠魔大厅]
+{
+;#OR
+;CheckCalc <$WEEK> == 1
+;CheckCalc <$WEEK> == 3
+;CheckCalc <$WEEK> == 5
+;#ACT
+;Break
+;#SAY
+;欢迎挑战屠魔大厅，每周二、四、六、日全天开放，等级达到25级的玩家可组队后由队长传送进入，最多可供3位勇士组队进入。每日挑战次数不限，但每日只能领取1种屠魔奖励，每日24点将重置领取次数。<#SO:99999>确定<#SO/>
+;
+;#IF
+;CheckCalc <$VERSION> < 4
+;#ACT
+;#SAY
+;欢迎挑战屠魔大厅，每周二、四、六、日全天开放，等级达到25级的玩家可组队后由队长传送进入，最多可供3位勇士组队进入。每日挑战次数不限，但每日只能领取1种屠魔奖励，每日24点将重置领取次数，请大家在此之前完成领取!是否现在开启挑战？<#SO:1>进入屠魔大厅<#SO/><#SO:4>领取今日屠魔奖励<#SO/>
+;
+;#IF
+;CheckCalc <$VERSION> == 4
+;#ACT
+;#SAY
+;欢迎挑战屠魔大厅，每周二、四、六、日全天开放，等级达到25级的玩家可组队后由队长传送进入，最多可供3位勇士组队进入。每日挑战次数不限，但每日只能领取1种屠魔奖励，每日24点将重置领取次数，请大家在此之前完成领取!是否现在开启挑战？<#SO:1>进入屠魔大厅<#SO/><#SO:2>挑战屠魔秘境(标准)<#SO/><#SO:4>领取今日屠魔奖励<#SO/>
+;
+#IF
+;CheckCalc <$VERSION> == 7
+#ACT
+LOG "[屠魔大厅] 进入[@屠魔大厅] 入口，显示主菜单"
+#SAY
+欢迎挑战屠魔大厅，每周二、四、六、日全天开放，等级达到25级的玩家可组队后由队长传送进入，最多可供3位勇士组队进入。每日挑战次数不限，但每日只能领取1种屠魔奖励，每日24点将重置领取次数，请大家在此之前完成领取!是否现在开启挑战？<#SO:1>进入屠魔大厅<#SO/><#SO:2>挑战屠魔秘境(标准)<#SO/><#SO:3>挑战屠魔秘境(进阶)<#SO/><#SO:4>领取今日屠魔奖励<#SO/>
+
+[@1]
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作！
+
+
+#IF
+CheckCalc <$GROUPNUM> > 3
+#ACT
+Break
+#SAY
+队伍人数超过3人！
+
+#IF
+CheckGroupVar $LEVEL < 25
+#ACT
+Break
+#SAY
+队伍有成员等级未达到25级！
+
+#IF
+#ACT
+LOG "[屠魔大厅] 进入[@1]（普通）- 显示消耗方式选择"
+#SAY
+您选择挑战屠魔大厅，请问想要通过哪种消耗方式进入呢？<#SO:1>消耗10万金币<#SO/><#SO:2>消耗3灵符<#SO/><#SO:99999>我再考虑一下<#SO/>
+
+[@1_1]
+#IF
+CheckGroupVar $GOLD < 100000
+#ACT
+Break
+#SAY
+队伍有成员金币不到10万！
+
+#IF
+GroupCheckNearby
+#ACT
+LOG "[屠魔大厅] 普通 - 选择金币入场，创建实例并传送"
+CreateInstance 80 120 0 0 0
+GroupGoto @屠魔大厅扣金币
+#ELSESAY
+队伍成员不在附近
+
+[@1_2]
+#IF
+CheckGroupVar $ItemNum(90226,3) == 0
+#ACT
+Break
+#SAY
+队伍有成员灵符不到3个！
+
+#IF
+GroupCheckNearby
+#ACT
+LOG "[屠魔大厅] 普通 - 选择灵符入场，创建实例并传送"
+CreateInstance 80 120 0 0 0
+GroupGoto @屠魔大厅扣灵符
+#ELSESAY
+队伍成员不在附近
+
+
+[@2]
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作！
+
+#IF
+CheckCalc <$GROUPNUM> > 3
+#ACT
+Break
+#SAY
+队伍人数超过3人！
+
+#IF
+CheckGroupVar $LEVEL < 25
+#ACT
+Break
+#SAY
+队伍有成员等级未达到25级！
+
+#IF
+#ACT
+Break
+LOG "[屠魔大厅] 进入[@2]（标准）- 显示消耗方式选择"
+#SAY
+您选择挑战屠魔秘境(标准)，请问想要通过哪种消耗方式进入呢？<#SO:1>消耗10万金币<#SO/><#SO:2>消耗3灵符<#SO/><#SO:99999>我再考虑一下<#SO/>
+
+[@2_1]
+#IF
+CheckGroupVar $GOLD < 100000
+#ACT
+Break
+#SAY
+队伍有成员金币不到10万！
+
+#IF
+GroupCheckNearby
+#ACT
+LOG "[屠魔大厅] 标准 - 选择金币入场，创建实例并传送"
+CreateInstance 80 120 0 0 1
+GroupGoto @屠魔大厅扣金币
+#ELSESAY
+队伍成员不在附近
+
+
+[@2_2]
+#IF
+CheckGroupVar $ItemNum(90226,3) == 0
+#ACT
+Break
+#SAY
+队伍有成员灵符不到3个！
+
+#IF
+GroupCheckNearby
+#ACT
+LOG "[屠魔大厅] 标准 - 选择灵符入场，创建实例并传送"
+CreateInstance 80 120 0 0 1
+GroupGoto @屠魔大厅扣灵符
+#ELSESAY
+队伍成员不在附近
+
+[@3]
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作！
+
+#IF
+CheckCalc <$GROUPNUM> > 3
+#ACT
+Break
+#SAY
+队伍人数超过3人！
+
+#IF
+CheckGroupVar $LEVEL < 25
+#ACT
+Break
+#SAY
+队伍有成员等级未达到25级！
+
+#IF
+#ACT
+LOG "[屠魔大厅] 进入[@3]（进阶）- 显示消耗方式选择"
+#SAY
+您选择挑战屠魔秘境(进阶)，请问想要通过哪种消耗方式进入呢?<#SO:1>消耗10万金币<#SO/><#SO:2>消耗3灵符<#SO/><#SO:99999>我再考虑一下<#SO/>
+
+[@3_1]
+#IF
+CheckGroupVar $GOLD < 100000
+#ACT
+Break
+#SAY
+队伍有成员金币不到10万！
+
+#IF
+GroupCheckNearby
+#ACT
+LOG "[屠魔大厅] 进阶 - 选择金币入场，创建实例并传送"
+CreateInstance 80 120 0 0 2
+GroupGoto @屠魔大厅扣金币
+#ELSESAY
+队伍成员不在附近
+
+[@3_2]
+#IF
+CheckGroupVar $ItemNum(90226,3) == 0
+#ACT
+Break
+#SAY
+队伍有成员灵符不到3个！
+
+#IF
+GroupCheckNearby
+#ACT
+LOG "[屠魔大厅] 进阶 - 选择灵符入场，创建实例并传送"
+CreateInstance 80 120 0 0 2
+GroupGoto @屠魔大厅扣灵符
+#ELSESAY
+队伍成员不在附近
+
+[@4]
+#IF
+CheckCalc <$STR(J24)> < 1
+CheckCalc <$STR(J25)> < 1
+CheckCalc <$STR(J26)> < 1
+#ACT
+Break
+#SAY
+您今天没用去过屠魔大厅。<#SO:999999>确定<#SO/>
+
+#IF
+CheckCalc <$STR(J27)> == 1
+#ACT
+Break
+#SAY
+您今天已经领过奖励。<#SO:999999>确定<#SO/>
+
+#IF
+#ACT
+Break
+LOG "[屠魔大厅] 进入[@4] 奖励菜单"
+#SAY
+您需要屠魔什么奖励呢？以下奖励只能领取一次哦！<#SO:1>领取屠魔大厅(普通)奖励，最高层数：[<$STR(J24)>]<#SO/><#SO:2>领取屠魔秘境(标准)奖励，最高层数：[<$STR(J25)>]<#SO/><#SO:3>领取屠魔秘境(进阶)奖励，最高层数：[<$STR(J26)>]<#SO/>
+
+[@4_1]
+#IF
+CheckCalc <$STR(J24)> < 1
+#ACT
+Break
+#SAY
+您今天没用去过屠魔大厅。<#SO:999999>确定<#SO/>
+
+#IF
+HasBagSpace == 0
+#ACT
+TopMessage "当前背包可用空间不足 1" FALSE
+Break
+
+#IF
+CheckCalc <$STR(J24)> == 1
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(1级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 2
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(2级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 3
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(3级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 4
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(4级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 5
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(5级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 6
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(6级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 7
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(7级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 8
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(8级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 9
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(9级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 10
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(10级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 11
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(11级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 12
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(12级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 13
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(13级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 14
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(14级) 1 TRUE
+
+#IF
+CheckCalc <$STR(J24)> == 15
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(15级) 1 TRUE
+
+[@4_2]
+#IF
+CheckCalc <$STR(J25)> < 1
+#ACT
+Break
+#SAY
+您今天没用去过屠魔秘境(标准)。<#SO:999999>确定<#SO/>
+
+#IF
+CheckCalc <$STR(J25)> == 1
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(标准秘境) 1 TRUE
+
+[@4_3]
+#IF
+CheckCalc <$STR(J26)> < 1
+#ACT
+Break
+#SAY
+您今天没用去过屠魔秘境(进阶)。<#SO:999999>确定<#SO/>
+
+#IF
+CheckCalc <$STR(J26)> == 1
+#ACT
+MOV J27 1
+GiveItem  屠魔宝箱(进阶秘境) 1 TRUE
+}

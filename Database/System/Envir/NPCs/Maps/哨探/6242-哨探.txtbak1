@@ -1,0 +1,326 @@
+﻿[@MAIN]
+#IF
+#ACT
+#SAY
+请问你想去哪里？<#SO:1>屠魔大厅<#SO/><#SO:2>挑战副本<#SO/><#SO:3>蜘蛛长廊<#SO/><#SO:4>魔龙幻境<#SO/>
+
+[@1]
+#SAY
+欢迎挑战屠魔大厅，最多可供3位勇士组队进入。每日挑战次数不限，但每日只能领取1种屠魔奖励，每日24点将重置领取次数，请大家在此之前完成领取！是否现在开启挑战？<#SO:1>进入屠魔大厅<#SO/><#SO:2>挑战屠魔秘境(标准)<#SO/><#SO:3>挑战屠魔秘境(进阶)<#SO/><#SO:5>领取今日屠魔奖励<#SO/>
+
+[@1_1]
+#SAY
+屠魔大厅每日挑战不限次数，但奖励只能领取一次。<br>屠魔大厅今日挑战最高波数：<$STR(J24)>。<#SO:1>确认进入<#SO/><#SO:2>取消<#SO/>
+
+[@1_1_1]
+#IF
+NOT GROUPLEADER
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作！
+
+#IF
+NOT CHECKGROUPMEMBERLEVEL >= 25
+#ACT
+Break
+#SAY
+队伍有成员等级未达到25级！
+
+#IF
+CHECKGROUPMEMBERGOLD  < 50000
+#ACT
+Break
+#SAY
+队伍有成员金币不到5万！
+
+#IF
+NOT CHECKGROUPMEMBERITEMIDX 90226 1
+#ACT
+Break
+#SAY
+队伍有成员灵符不到1个！
+
+#IF
+GROUPCHECKNEARBY
+#ACT
+LOG "[哨探NPC] 普通屠魔大厅 - 开始扣除资源"
+TakeGroupMemberGold 50000
+TakeGroupMemberItemIdx  90226 1
+LOG "[哨探NPC] 资源扣除完成，创建副本"
+CreateInstance 80 120 21 0
+LOG "[哨探NPC] 普通屠魔大厅 - 副本创建完成，开始传送"
+GroupInstanceMove 80 1005 272 0
+LOG "[哨探NPC] 普通屠魔大厅 - 传送完成"
+#ELSESAY
+队伍成员不在附近
+
+[@1_2]
+#SAY
+屠魔秘境(标准)每日挑战不限次数，但奖励只能领取一次。<br>今日挑战最高波数：<$STR(J25)>。<#SO:1>确认进入<#SO/><#SO:2>取消<#SO/>
+
+[@1_2_1]
+#IF
+NOT GROUPLEADER
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作！
+
+#IF
+CHECKGROUPMEMBERLEVEL < 40
+#ACT
+Break
+#SAY
+队伍有成员等级未达到40级！
+
+#IF
+CHECKGROUPMEMBERGOLD  < 50000
+#ACT
+Break
+#SAY
+队伍有成员金币不到5万！
+
+#IF
+NOT CHECKGROUPMEMBERITEMIDX 90226 3
+#ACT
+Break
+#SAY
+队伍有成员灵符不到3个！
+
+#IF
+GROUPCHECKNEARBY
+#ACT
+LOG "[哨探NPC] 标准屠魔秘境 - 开始扣除资源"
+TakeGroupMemberGold 50000
+TakeGroupMemberItemIdx 90226 3
+CreateInstance 80 120 21 1
+GroupInstanceMove 80 1092 362 0
+LOG "[哨探NPC] 标准屠魔秘境 - 传送完成"
+#ELSESAY
+队伍成员不在附近
+
+[@1_3]
+#SAY
+屠魔秘境(进阶)每日挑战不限次数，但奖励只能领取一次。<br>今日挑战最高波数：<$STR(J26)>。<#SO:1>确认进入<#SO/><#SO:2>取消<#SO/>
+
+[@1_3_1]
+#IF
+NOT GROUPLEADER
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作！
+
+#IF
+CHECKGROUPMEMBERLEVEL < 40
+#ACT
+Break
+#SAY
+队伍有成员等级未达到40级！
+
+#IF
+CHECKGROUPMEMBERGOLD  < 50000
+#ACT
+Break
+#SAY
+队伍有成员金币不到5万！
+
+#IF
+NOT CHECKGROUPMEMBERITEMIDX 91195 1
+#ACT
+Break
+#SAY
+队伍有成员副本入场券不到1个！
+
+#IF
+GROUPCHECKNEARBY
+#ACT
+TakeGroupMemberGold 50000
+TakeGroupMemberItemIdx 91195 1
+CreateInstance 80 120 21 2
+GroupInstanceMove 80 1092 362 0
+#ELSESAY
+队伍成员不在附近
+
+[@1_5]
+#IF
+CHECKCALC <$STR(J27)> == 1
+#ACT
+Break
+#SAY
+勇士，您已领取过今日的奖励了，请来日再战。
+
+#IF
+CHECKCALC <$STR(J26)> > 0
+#ACT
+Break
+#SAY
+今日最佳除魔记录：<$STR(J26)>层(进阶)。是否确认领取奖励？<#SO:1>确认领取<#SO/><#SO:2>我再想想<#SO/>
+
+#IF
+CHECKCALC <$STR(J25)> > 0
+#ACT
+Break
+#SAY
+今日最佳除魔记录：<$STR(J25)>层(标准)。是否确认领取奖励？<#SO:1>确认领取<#SO/><#SO:2>我再想想<#SO/>
+
+#IF
+CHECKCALC <$STR(J24)> > 0
+#ACT
+Break
+#SAY
+今日最佳屠魔记录：<$STR(J24)>波。是否确认领取奖励？<#SO:1>确认领取<#SO/><#SO:2>我再想想<#SO/>
+
+#IF
+#ACT
+#SAY
+您今日的屠魔战果尚不足令人信服，暂时无法领取奖励，请继续努力！
+
+[@1_5_1]
+#IF
+CHECKCALC <$STR(J26)> == 2
+#ACT
+MOV J27 1
+GiveItemIdx 94057 1
+Break
+
+#IF
+CHECKCALC <$STR(J25)> == 2
+#ACT
+MOV J27 1
+GiveItemIdx 94056 1
+Break
+
+#IF
+CHECKCALC <$STR(J24)> >= 1
+CHECKCALC <$STR(J24)> <= 15
+#ACT
+MOV J27 1
+CALC @ITEMID 94040 + <$STR(J24)>
+GiveItemIdx <@ITEMID> 1
+Break
+
+[@2]
+#IF
+#ACT
+#SAY
+请问你想挑战哪个副本呢？</br>友情提示：无相秘境与魔虫窟共享挑战次数<#SO:1>魔虫窟<#SO/><#SO:2>无相秘境<#SO/>
+
+[@3]
+#SAY
+蜘蛛长廊等级达到40级的玩家可组队进入。难度越高，刷新怪物的数量越多，同时怪物会获得随机的属性强化。<#SO:1>蜘蛛长廊（标准）<#SO/><#SO:2>蜘蛛长廊（进阶）<#SO/><#SO:3>蜘蛛长廊（困难）<#SO/><#SO:6>领取蜘蛛长廊奖励<#SO/>
+
+[@4]
+#SAY
+魔龙幻境可组队进入，梦境险恶未卜，请至少三人成行前往！<#SO:1>挑战魔龙幻境（标准）<#SO/><#SO:2>挑战魔龙幻境（进阶）<#SO/><#SO:3>挑战魔龙幻境（困难）<#SO/><#SO:6>领取魔龙幻境奖励<#SO/>
+
+[@2_1]
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作
+
+#IF
+CheckGroupVar $ItemNum(91195,1) == 0
+#ACT
+Break
+#SAY
+传入魔虫窟需扣除每位队伍成员1张“副本入场券”，似乎有人准备不足啊。
+
+#IF
+CHECKGROUPVAR J255 == 1
+#ACT
+Break
+#SAY
+队伍中有人今天已经去过魔虫窟了。<#SO:999999>确定<#SO/>
+
+#IF
+CheckGroupVar $LEVEL < 25
+#ACT
+Break
+#SAY
+不好意思，队伍有成员等级不足，请到达25级以后再来。<#SO:1>确定<#SO/>
+
+#IF
+GroupCheckNearby
+#ACT
+CreateInstance 72 180 1 0 0
+GroupGoto @魔虫窟扣道具
+Break
+#ELSESAY
+队伍成员不在附近
+
+[@2_2]
+#IF
+CheckCalc <$VERSION> < 5
+#ACT
+Break
+#SAY
+该玩法将在苍月版本开放，可以通过快捷键W查看版本内容详情！<#SO:99>知道了<#SO/>
+
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作
+
+#IF
+CheckGroupVar $LEVEL < 40
+#ACT
+Break
+#SAY
+不好意思，队伍有成员等级不足，请到达40级以后再来。<#SO:1>确定<#SO/>
+
+#IF
+GroupCheckNearby
+#ACT
+MOVE 40 1016 281 3
+Break
+#ELSESAY
+队伍成员不在附近
+
+[@魔虫窟扣道具]
+#IF
+#ACT
+MOV J255 1
+TAKEITEM 副本入场券 1
+
+[@屠魔大厅扣金币]
+#IF
+#ACT
+TakeGold 100000
+
+[@屠魔大厅扣灵符]
+#IF
+#ACT
+TakeItemIdx 90226 3
+
+[@魔龙幻境扣金币]
+#IF
+CheckCalc <$STR(J47)> == 0
+#ACT
+Mov J47 1
+TakeGold 100000
+
+[@魔龙幻境扣灵符]
+#IF
+CheckCalc <$STR(J47)> == 0
+#ACT
+Mov J47 1
+TakeItemIdx 90226 3
+
+[@蜘蛛长廊扣灵符]
+#IF
+#ACT
+Mov J47 1
+TakeItemIdx 90226 3
+
+[@蜘蛛长廊扣金币]
+#IF
+#ACT
+Mov J47 1
+TakeGold 100000

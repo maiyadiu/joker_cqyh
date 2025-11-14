@@ -470,3 +470,34 @@ goto @MAIN
 #IF
 #ACT
 goto @MAIN
+
+[@7]
+#IF
+#ACT
+#SAY
+Select: <#SO:1>Today Online<#SO/><#SO:2>Session Online<#SO/><#SO:3>Back<#SO/>
+
+[@7_1]
+#IF
+#SAY
+My today online time will be shown on top.
+#ACT
+ShowOnline TODAY
+#SAY
+<#SO:3>Back<#SO/>
+
+[@7_2]
+#IF
+#SAY
+My session online time will be shown on top.
+#ACT
+ShowOnline SESSION
+#SAY
+<#SO:3>Back<#SO/>
+
+[@7_3]
+
+[@2_1]
+#IF
+#ACT
+goto @MAIN

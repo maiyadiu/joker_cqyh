@@ -1,0 +1,136 @@
+﻿[@MAIN]
+#IF
+#ACT
+#SAY
+请问你想去哪里？<#SO:1>屠魔大厅<#SO/><#SO:2>挑战副本<#SO/><#SO:3>蜘蛛长廊<#SO/><#SO:4>魔龙幻境<#SO/>
+
+[@1]
+#IF
+#ACT
+#CALL 屠魔大厅.txt @屠魔大厅
+
+[@2]
+#IF
+#ACT
+#SAY
+请问你想挑战哪个副本呢？</br>友情提示：无相秘境与魔虫窟共享挑战次数<#SO:1>魔虫窟<#SO/><#SO:2>无相秘境<#SO/>
+
+[@3]
+#IF
+#ACT
+#CALL 蜘蛛长廊.txt @蜘蛛长廊
+
+[@4]
+#IF
+#ACT
+#CALL 魔龙幻境.txt @魔龙幻境
+
+[@2_1]
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作
+
+#IF
+CheckGroupVar $ItemNum(91195,1) == 0
+#ACT
+Break
+#SAY
+传入魔虫窟需扣除每位队伍成员1张“副本入场券”，似乎有人准备不足啊。
+
+#IF
+CHECKGROUPVAR J255 == 1
+#ACT
+Break
+#SAY
+队伍中有人今天已经去过魔虫窟了。<#SO:999999>确定<#SO/>
+
+#IF
+CheckGroupVar $LEVEL < 25
+#ACT
+Break
+#SAY
+不好意思，队伍有成员等级不足，请到达25级以后再来。<#SO:1>确定<#SO/>
+
+#IF
+GroupCheckNearby
+#ACT
+CreateInstance 72 180 1 0 0
+GroupGoto @魔虫窟扣道具
+Break
+#ELSESAY
+队伍成员不在附近
+
+[@2_2]
+#IF
+CheckCalc <$VERSION> < 5
+#ACT
+Break
+#SAY
+该玩法将在苍月版本开放，可以通过快捷键W查看版本内容详情！<#SO:99>知道了<#SO/>
+
+#IF
+not Groupleader
+#ACT
+Break
+#SAY
+勇士你不是队长，请等待队长操作
+
+#IF
+CheckGroupVar $LEVEL < 40
+#ACT
+Break
+#SAY
+不好意思，队伍有成员等级不足，请到达40级以后再来。<#SO:1>确定<#SO/>
+
+#IF
+GroupCheckNearby
+#ACT
+MOVE 40 1016 281 3
+Break
+#ELSESAY
+队伍成员不在附近
+
+[@魔虫窟扣道具]
+#IF
+#ACT
+MOV J255 1
+TAKEITEM 副本入场券 1
+
+[@屠魔大厅扣金币]
+#IF
+#ACT
+TakeGold 100000
+
+[@屠魔大厅扣灵符]
+#IF
+#ACT
+TakeItemIdx 90226 3
+
+[@魔龙幻境扣金币]
+#IF
+CheckCalc <$STR(J47)> == 0
+#ACT
+Mov J47 1
+TakeGold 100000
+
+[@魔龙幻境扣灵符]
+#IF
+CheckCalc <$STR(J47)> == 0
+#ACT
+Mov J47 1
+TakeItemIdx 90226 3
+
+[@蜘蛛长廊扣灵符]
+#IF
+#ACT
+Mov J47 1
+TakeItemIdx 90226 3
+
+[@蜘蛛长廊扣金币]
+#IF
+#ACT
+Mov J47 1
+TakeGold 100000
